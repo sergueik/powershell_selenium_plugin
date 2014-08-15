@@ -1,0 +1,42 @@
+https://github.com/gempesaw/Selenium-Remote-Driver/blob/master/ide-plugin.js
+explains how to craft the formatter directly in Selenium IDE
+https://code.google.com/p/perl-formatters/source/browse/trunk/src/content/formats/perl-rc.js
+
+http://blog.reallysimplethoughts.com/2011/11/01/the-perl-php-and-groovy-formatters-for-selenium-ide/Selenium related:
+
+http://blog.wedoqa.com/2012/02/how-to-setup-selenium-webdriver-with-visual-studio-and-nunit/
+http://nadimsaker.blogspot.com/2011/09/how-to-run-selenium-webdriver-code-with.html
+https://code.google.com/p/selenium/wiki/InternetExplorerDriver
+http://docs.seleniumhq.org/docs/03_webdriver.jsp
+http://docs.seleniumhq.org/docs/03_webdriver.jsp
+http://docs.seleniumhq.org/docs/04_webdriver_advanced.jsp
+http://deleodusanya.wordpress.com/2013/04/09/using-selenium-with-c/
+http://www.techiethoughts.com/technical-posts/selenium-technical-posts/some-useful-selenium-webdriver-api-s.html
+http://www.programcreek.com/java-api-examples/index.php?api=org.openqa.selenium.remote.DesiredCapabilities
+http://www.codeproject.com/Tips/311341/Selenium-automates-browsers-ComboBox-Fix-using-Csh
+http://www.codeproject.com/Articles/688936/Screenshot-Smoke-Testing
+
+http://www.codeproject.com/Articles/744686/Integrating-Jasmine-and-Selenuim-for-Web-UI-Testin
+http://www.codeproject.com/search.aspx?q=selenium&x=0&y=0&sbo=kw
+
+
+http://testingbot.com/support/getting-started/csharp.html
+https://code.google.com/p/selenium/source/browse/rake-tasks/msbuild/webdriver.msbuild.proj?name=selenium-2.0-alpha-5&r=ae4dd1c0f31409e3fd7cbe5b0500753381e9c84c
+
+
+http://qtp-automate.blogspot.com/2013/05/creating-basic-selenium-web-driver-test.html
+
+
+http://www.jroller.com/selenium/
+Selenium WebDriver - Running Tests on Internet Explorer Browser
+http://www.youtube.com/watch?v=pfNeGjM4GUc
+
+http://www.codeproject.com/search.aspx?q=selenium&x=0&y=0&sbo=kw
+http://www.codeproject.com/Articles/131565/Selenium-s-How-To
+http://www.codeproject.com/Articles/338036/BrowserAutomationCrawler
+http://www.codeproject.com/Articles/143430/Test-your-web-application-s-UI-with-JUnit-and-Sele
+http://www.codeproject.com/Articles/744686/Integrating-Jasmine-and-Selenuim-for-Web-UI-Testin
+
+http://www.jroller.com/selenium/
+
+http://www.jroller.com/selenium/#loadtesting
