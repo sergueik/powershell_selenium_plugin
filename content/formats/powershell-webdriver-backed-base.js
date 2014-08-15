@@ -3,7 +3,7 @@
  */
 
 this.options = {
-    receiver: "selenium",
+    receiver: "$selenium",
 	driver_namespace: "OpenQA.Selenium.Firefox",
 	driver_implementation: "FirefoxDriver()",
 	test_namespace: "SeleniumTests",
