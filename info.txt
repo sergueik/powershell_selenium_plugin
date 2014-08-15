@@ -38,5 +38,6 @@ http://www.codeproject.com/Articles/143430/Test-your-web-application-s-UI-with-J
 http://www.codeproject.com/Articles/744686/Integrating-Jasmine-and-Selenuim-for-Web-UI-Testin
 
 http://www.jroller.com/selenium/
-
-http://www.jroller.com/selenium/#loadtesting
+https://github.com/aivaturi/Selenium-Remote-Driver/blob/master/ide-plugin.js
+https://github.com/SeleniumHQ/selenium
+https://code.google.com/p/selenium-vba/source/browse/trunk/BuildWrapper.py
