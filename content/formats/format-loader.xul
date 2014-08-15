@@ -8,9 +8,7 @@
     <html:script type="application/javascript">
         var ide_api = new API();
         ide_api.addPlugin("webdriver-backed-formatters@dave.hunt");
-        ide_api.addPluginProvidedFormatter("java-junit-webdriver-backed", "Java (JUnit) - WebDriver Backed", "chrome://webdriver-backed-formatters/content/formats/java-junit-webdriver-backed.js");
-        ide_api.addPluginProvidedFormatter("java-junit4-webdriver-backed", "Java (JUnit4) - WebDriver Backed", "chrome://webdriver-backed-formatters/content/formats/java-junit4-webdriver-backed.js");
-        ide_api.addPluginProvidedFormatter("java-testng-webdriver-backed", "Java (TestNG) - WebDriver Backed", "chrome://webdriver-backed-formatters/content/formats/java-testng-webdriver-backed.js");
+        ide_api.addPluginProvidedFormatter("powershell", "Powershell - WebDriver Backed", "chrome://webdriver-backed-formatters/content/formats/powershell.js");
 		ide_api.addPluginProvidedFormatter("csharp-nunit-webdriver-backed", "C# (NUnit) - WebDriver Backed", "chrome://webdriver-backed-formatters/content/formats/csharp-nunit-webdriver-backed.js");
     </html:script>
 </overlay>

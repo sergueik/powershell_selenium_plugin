@@ -5,9 +5,10 @@ Requirements: Selenium IDE v1.0.5
 =================================================
 
 NOTE:
-This is a plugin for Selenium IDE that adds WebDriver backed Selenium 
-formatters, which allows users to take advantage of WebDriver without having to
-modify their tests to use the new API.
+This is a alpha version plugin for Selenium IDE that adds WebDriver backed Selenium 
+Powershell formatter, which allows users to run Powershell Selenium tests without the need to compile the test into assembly. The original WebDriver backed Selenium
+formatter is kept in this xpi for crafting conversion side-by-side.
+Currently the Powershell plugin is uses a replica of csharp-nunit-webdriver-backed.js  and its dependencies.
 
 INSTALLATION:
 1. Run build.bat (or build.sh on Linux).

@@ -3,17 +3,22 @@
  xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
     <em:id>webdriver-backed-formatters@dave.hunt</em:id>
-    <em:name>WebDriver Backed Formatters</em:name>
-    <em:version>1.0.4</em:version>
-    <em:creator>Dave Hunt</em:creator>
-    <em:description>A plugin to add a WebDriver backed formatters to Selenium-IDE</em:description>
+    <em:name>Powershell WebDriver Backed Formatter</em:name>
+    <em:version>0.0.0.2</em:version>
+    <em:creator>Serguei Kouzmine</em:creator>
+    <em:description>
+This is a alpha version Selenium 
+Powershell formatter, which allows users to run Powershell Selenium tests without the need to compile the test into assembly. The original WebDriver backed C# Selenium formatter is kept in this xpi for crafting conversion side-by-side.
+Currently the Powershell plugin a replica of csharp-nunit-webdriver-backed.js  and its dependencies.
+ </em:description>
+
     <em:type>2</em:type> <!-- type extension -->
  
     <em:targetApplication>
       <Description>
-        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- firefox -->
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id><!-- firefox -->
         <em:minVersion>1.5</em:minVersion>
-        <em:maxVersion>6.*</em:maxVersion>
+        <em:maxVersion>99.*</em:maxVersion>
       </Description>
     </em:targetApplication>
  
