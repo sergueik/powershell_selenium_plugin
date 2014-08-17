@@ -2,7 +2,7 @@
  
 setlocal
  
-set APP_NAME="webdriver-backed-formatters"
+set APP_NAME="powershell-webdriver-formatter"
 set CHROME_PROVIDERS="content"
  
 set ROOT_DIR=%CD%

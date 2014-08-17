@@ -1,5 +1,5 @@
 /*
- * Formatter for C# / WebDriver / Firefox client.
+ * Formatter for Powershell / WebDriver / Firefox client.
  */
  
 var subScriptLoader = Components.classes['@mozilla.org/moz/jssubscript-loader;1'].getService(Components.interfaces.mozIJSSubScriptLoader);
