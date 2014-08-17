@@ -170,7 +170,7 @@ function formatSuite(testSuite, filename) {
   for (var i = 0; i < testSuite.tests.length; ++i) {
     var testClass = testSuite.tests[i].getTitle();
     formattedSuite += indents(4)
-        + "suite.Add(new " + testClass + "());\n";
+        + 'suite.Add(new ' + testClass + "());\n";
   }
  
   formattedSuite += indents(4) + "return suite;\n"
@@ -196,57 +196,65 @@ this.options = {
   initialIndents:  '3',
   header:
      'Param (\n'+
-     '[switch] $browser\n'+
+     indents(1) + '[switch] $browser\n'+
      ')\n'+
      '# http://stackoverflow.com/questions/8343767/how-to-get-the-current-directory-of-the-cmdlet-being-executed\n'+
      'function Get-ScriptDirectory\n'+
      '{\n'+
-     '$Invocation = (Get-Variable MyInvocation -Scope 1).Value;\n'+
-     'if($Invocation.PSScriptRoot)\n'+
-     '{\n'+
-     '$Invocation.PSScriptRoot;\n'+
-     '}\n'+
-     'Elseif($Invocation.MyCommand.Path)\n'+
-     '{\n'+
-     'Split-Path $Invocation.MyCommand.Path\n'+
-     '}\n'+
-     'else\n'+
-     '{\n'+
-     '$Invocation.InvocationName.Substring(0,$Invocation.InvocationName.LastIndexOf("\"));\n'+
-     '}\n'+
+     indents(1) + '$Invocation = (Get-Variable MyInvocation -Scope 1).Value;\n'+
+     indents(1) + 'if($Invocation.PSScriptRoot){\n'+
+     indents(2) + '$Invocation.PSScriptRoot;\n'+
+     indents(1) + '}\n'+
+     indents(1) + 'Elseif($Invocation.MyCommand.Path){\n'+
+     indents(2) + 'Split-Path $Invocation.MyCommand.Path\n'+
+     indents(1) + '} else {\n'+
+     indents(2) + '$Invocation.InvocationName.Substring(0,$Invocation.InvocationName.LastIndexOf("\"));\n'+
+     indents(1) + '}\n'+
      '}\n'+
      '$shared_assemblies = @(\n'+
-     '"WebDriver.dll",\n'+
-     '"WebDriver.Support.dll",\n'+
-     '"Selenium.WebDriverBackedSelenium.dll"\n'+
-     ')\n'+
+     indents(1) + '"WebDriver.dll",\n'+
+     indents(1) + '"WebDriver.Support.dll",\n'+
+     indents(1) + '"Selenium.WebDriverBackedSelenium.dll"\n'+
+     indents(1) + ')\n\n'+
      '$env:SHARED_ASSEMBLIES_PATH = "c:\\developer\\sergueik\\csharp\\SharedAssemblies"\n'+
      '$env:SCREENSHOT_PATH = "C:\\developer\\sergueik\\powershell_ui_samples"\n'+
      '$shared_assemblies_path = $env:SHARED_ASSEMBLIES_PATH\n'+
      'pushd $shared_assemblies_path\n'+
-     '$shared_assemblies | foreach-object { Unblock-File -Path $_ ; Add-Type -Path $_ }\n' +
+     indents(1) + '$shared_assemblies | foreach-object { Unblock-File -Path $_ ; Add-Type -Path $_ }\n' +
      'popd\n\n' + 
      '$verificationErrors = new-object System.Text.StringBuilder\n' + 
+     '$baseURL = "http://www.wikipedia.org"\n' +
      '$phantomjs_executable_folder = "C:\\tools\\phantomjs"\n'+
      'if ($PSBoundParameters["browser"]) {\n'+
-     '$selenium_driver_folder = "c:\\java\\selenium"\n'+
-     'start-process -filepath "C:\\Windows\\System32\\cmd.exe" -argumentlist "start cmd.exe /c ${selemium_driver_folder}\\hub.cmd"\n'+
-     'start-process -filepath "C:\\Windows\\System32\\cmd.exe" -argumentlist "start cmd.exe /c ${selemium_driver_folder}\\node.cmd"\n'+
-     'start-sleep 10\n\n'+
-     '$capability = [OpenQA.Selenium.Remote.DesiredCapabilities]::Firefox()\n'+
-     '$uri = [System.Uri]("http://127.0.0.1:4444/wd/hub")\n'+
-     '$selenium = new-object OpenQA.Selenium.Remote.RemoteWebDriver($uri , $capability)\n'+
+     indents(1) + 'try { \n' + 
+     indents(2) + '$connection = (New-Object Net.Sockets.TcpClient)\n' + 
+     indents(2) + '$connection.Connect("127.0.0.1",4444)\n' + 
+     indents(2) + '$connection.Close()\n' + 
+     indents(1) + '} catch {\n' + 
+     indents(2) + '$selenium_driver = "c:\\java\\selenium"\n' + 
+     indents(2) + 'start-process -filepath "C:\\Windows\\System32\\cmd.exe" -argumentlist "start cmd.exe /c \${selenium_driver}\\hub.cmd"\n'+
+     indents(2) + 'start-process -filepath "C:\\Windows\\System32\\cmd.exe" -argumentlist "start cmd.exe /c \${selenium_driver}\\node.cmd"\n'+
+     indents(2) + 'start-sleep -seconds 10\n' +
+     indents(1) + '}\n' +
+     indents(1) + '$capability = [OpenQA.Selenium.Remote.DesiredCapabilities]::Firefox()\n'+
+     indents(1) + '$uri = [System.Uri]("http://127.0.0.1:4444/wd/hub")\n'+
+     indents(1) + '$selenium = new-object OpenQA.Selenium.Remote.RemoteWebDriver($uri , $capability)\n'+
      '} else {\n'+
-     '$selenium = new-object OpenQA.Selenium.PhantomJS.PhantomJSDriver($phantomjs_executable_folder)\n'+
-     '$selenium.Capabilities.SetCapability("ssl-protocol", "any" )\n'+
-     '$selenium.Capabilities.SetCapability("ignore-ssl-errors", $true)\n'+
-     '$selenium.capabilities.SetCapability("takesScreenshot", $true )\n'+
-     '$selenium.capabilities.SetCapability("userAgent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.7 Safari/534.34")\n'+
-     '$options = new-object OpenQA.Selenium.PhantomJS.PhantomJSOptions\n'+
-     '$options.AddAdditionalCapability("phantomjs.executable.path", $phantomjs_executable_folder)\n'+
+     indents(1) + '$selenium = new-object OpenQA.Selenium.PhantomJS.PhantomJSDriver($phantomjs_executable_folder)\n'+
+     indents(1) + '$selenium.Capabilities.SetCapability("ssl-protocol", "any" )\n'+
+     indents(1) + '$selenium.Capabilities.SetCapability("ignore-ssl-errors", $true)\n'+
+     indents(1) + '$selenium.capabilities.SetCapability("takesScreenshot", $true )\n'+
+     indents(1) + '$selenium.capabilities.SetCapability("userAgent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.7 Safari/534.34")\n'+
+     indents(1) + '$options = new-object OpenQA.Selenium.PhantomJS.PhantomJSOptions\n'+
+     indents(1) + '$options.AddAdditionalCapability("phantomjs.executable.path", $phantomjs_executable_folder)\n'+
      '}\n',
   footer:
-          '',
+     '# Cleanup\n' +
+     'try {\n' +
+     indents(1) + '$selenium.Quit()\n' +
+     '} catch [Exception] {\n' +
+     indents(1) + '# Ignore errors if unable to close the browser\n' +
+          '}\n',
   defaultExtension: 'ps1'
 };
 this.configForm = '<description>Variable for Selenium instance</description>' +
@@ -311,7 +319,7 @@ WDAPI.Driver.prototype.get = function(url) {
   if (url.length > 1 && (url.substring(1,8) == 'http://' || url.substring(1,9) == 'https://')) { // url is quoted
     return this.ref + '.Navigate().GoToUrl(' + url + ')';
   } else {
-    return this.ref + '.Navigate().GoToUrl(baseURL + ' + url + ')';
+    return this.ref + '.Navigate().GoToUrl($baseURL + ' + url + ')';
   }
 };
  
