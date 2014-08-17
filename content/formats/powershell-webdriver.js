@@ -59,7 +59,7 @@ function joinExpression(expression) {
 }
  
 function statement(expression) {
-  return expression.toString() + ';';
+  return expression.toString();
 }
  
 function assignToVariable(type, variable, expression) {
@@ -83,7 +83,7 @@ function verify(statement) {
       "{\n" +
       indents(1) + statement + "\n" +
       "}\n" +
-      "catch [AssertionException $e]\n" +
+      "catch [NUnit.Framework.AssertionException $e]\n" +
       "{\n" +
       indents(1) + "$verificationErrors.Append($e.Message);\n" +
       '}';
@@ -188,9 +188,9 @@ function defaultExtension() {
  
 this.options = {
   receiver: '$selenium',
+  driver_namespace: "OpenQA.Selenium.Firefox",
+  driver_capabilities: "Firefox()",
   showSelenese: 'false',
-  namespace: "SeleniumTest",
-  category: 'Browser',
   baseclass: 'BaseTest',
   indent: '4',
   initialIndents:  '3',
@@ -231,12 +231,11 @@ this.options = {
      indents(2) + '$connection.Connect("127.0.0.1",4444)\n' + 
      indents(2) + '$connection.Close()\n' + 
      indents(1) + '} catch {\n' + 
-     indents(2) + '$selenium_driver = "c:\\java\\selenium"\n' + 
-     indents(2) + 'start-process -filepath "C:\\Windows\\System32\\cmd.exe" -argumentlist "start cmd.exe /c \${selenium_driver}\\hub.cmd"\n'+
-     indents(2) + 'start-process -filepath "C:\\Windows\\System32\\cmd.exe" -argumentlist "start cmd.exe /c \${selenium_driver}\\node.cmd"\n'+
+     indents(2) + 'start-process -filepath "C:\\Windows\\System32\\cmd.exe" -argumentlist "start cmd.exe /c ' + 'c:\\java\\selenium\\hub.cmd"\n'+
+     indents(2) + 'start-process -filepath "C:\\Windows\\System32\\cmd.exe" -argumentlist "start cmd.exe /c ' + 'c:\\java\\selenium\\node.cmd"\n'+
      indents(2) + 'start-sleep -seconds 10\n' +
      indents(1) + '}\n' +
-     indents(1) + '$capability = [OpenQA.Selenium.Remote.DesiredCapabilities]::Firefox()\n'+
+     indents(1) + '$capability = [OpenQA.Selenium.Remote.DesiredCapabilities]::${driver_capabilities}\n'+
      indents(1) + '$uri = [System.Uri]("http://127.0.0.1:4444/wd/hub")\n'+
      indents(1) + '$selenium = new-object OpenQA.Selenium.Remote.RemoteWebDriver($uri , $capability)\n'+
      '} else {\n'+
@@ -257,19 +256,20 @@ this.options = {
           '}\n',
   defaultExtension: 'ps1'
 };
-this.configForm = '<description>Variable for Selenium instance</description>' +
-    '<textbox id="options_receiver" />' +
-    '<description>Namespace</description>' +
-    '<textbox id="options_namespace" />' +
-    '<description>Category</description>' +
-    '<textbox id="options_category" />' +
-    '<description>Base Class</description>' +
-    '<textbox id="options_baseclass" />' +
-    '<checkbox id="options_showSelenese" label="Show Selenese"/>';
+
+
+this.configForm =
+	'<description>Variable for Selenium instance name</description>' +
+	'<textbox id="options_receiver" />' +
+'<description>WebDriver Capabilities</description>' +
+	'<menulist id="options_driver_capabilities"><menupopup>' +
+	'<menuitem label="Firefox" value="Firefox()"/>' +
+	'<menuitem label="Google Chrome" value="Chrome()"/>' +
+	'<menuitem label="Internet Explorer" value="InternetExplorer()"/>' +
+	'</menupopup></menulist>'+ 
+	'<checkbox id="options_showSelenese" label="Show Selenese"/>';
  
 this.name = 'Powershell (WebDriver) / Firefox';
-this.testcaseExtension = '.ps1';
-this.suiteExtension = '.ps1';
 this.webdriver = true;
  
 WDAPI.Driver = function() {
@@ -328,6 +328,7 @@ WDAPI.Driver.prototype.getTitle = function() {
 };
 
 // TODO: implicitlyWait 
+// TODO: getWindowHandle
 // TODO 
 WDAPI.Driver.prototype.getAlert = function() {
   return 'CloseAlertAndGetItsText()';

@@ -8,6 +8,6 @@
     <html:script type="application/javascript">
         var ide_api = new API();
         ide_api.addPlugin("powershell-webdriver-formatter@serguei.kouzmine");
-        ide_api.addPluginProvidedFormatter("powershell", "Powershell - WebDriver Backed", "chrome://powershell-webdriver-formatter/content/formats/powershell.js");
+        ide_api.addPluginProvidedFormatter("powershell", "Powershell - WebDriver Backed", "chrome://powershell-webdriver-formatter/content/formats/powershell-webdriver.js");
     </html:script>
 </overlay>

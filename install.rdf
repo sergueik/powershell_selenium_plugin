@@ -2,9 +2,9 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
  xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
-    <em:id>powershell-webdriver-formatters@serguei.kouzmine</em:id>
+    <em:id>powershell-webdriver-formatter@serguei.kouzmine</em:id>
     <em:name>Powershell WebDriver Formatter</em:name>
-    <em:version>0.0.0.3</em:version>
+    <em:version>0.0.1</em:version>
     <em:creator>Serguei Kouzmine</em:creator>
     <em:description>This is a alpha version Selenium 
 Powershell formatter, which allows users to run Powershell Selenium tests without the need to compile the test into assembly.</em:description>
