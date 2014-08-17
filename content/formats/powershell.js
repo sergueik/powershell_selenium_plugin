@@ -93,7 +93,7 @@ this.options.header = ''+
 'pushd $shared_assemblies_path\n'+
 '$shared_assemblies | foreach-object { Unblock-File -Path $_ ; Add-Type -Path $_ }\n' +
 'popd\n\n' + 
-
+'$verificationErrors = new-object System.Text.StringBuilder\n' + 
 '$phantomjs_executable_folder = "C:\\tools\\phantomjs"\n'+
 'if ($PSBoundParameters["browser"]) {\n'+
 '$selenium_driver_folder = "c:\\java\\selenium"\n'+
