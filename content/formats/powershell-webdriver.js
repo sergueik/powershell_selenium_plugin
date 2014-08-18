@@ -67,15 +67,15 @@ function assignToVariable(type, variable, expression) {
 }
  
 function ifCondition(expression, callback) {
-  return 'if (' + expression.toString() + ")\n{\n" + callback() + '}';
+  return 'if (' + expression.toString() + ")\n{\n" + callback() + "\n}\n";
 }
  
 function assertTrue(expression) {
-  return '[NUnit.Framework.Assert]::IsTrue(' + expression.toString() + ');';
+  return '[NUnit.Framework.Assert]::IsTrue(' + expression.toString() + ')';
 }
  
 function assertFalse(expression) {
-  return '[NUnit.Framework.Assert]::IsFalse(' + expression.toString() + ');';
+  return '[NUnit.Framework.Assert]::IsFalse(' + expression.toString() + ')';
 }
  
 function verify(statement) {
@@ -125,14 +125,14 @@ function waitFor(expression) {
       indents(1) + "}\n" +
       indents(1) + "catch [Exception]\n" +
       indents(1) + "{}\n" +
-      indents(1) + "Thread.Sleep(1000);\n" +
+      indents(1) + "Thread.Sleep(1000)\n" +
       "}";
 }
  
 function assertOrVerifyFailure(line, isAssert) {
   var message = '"expected failure"';
-  var failStatement = isAssert ? "[NUnit.Framework.Assert]::Fail(" + message + ");" :
-      "$verificationErrors.Append(" + message + ");";
+  var failStatement = isAssert ? "[NUnit.Framework.Assert]::Fail(" + message + ")" :
+      "$verificationErrors.Append(" + message + ")";
   return "try\n" +
       "{\n" +
       line + "\n" +
@@ -142,7 +142,7 @@ function assertOrVerifyFailure(line, isAssert) {
 }
  
 function pause(milliseconds) {
-  return '[System.Threading.Thread]::Sleep(' + parseInt(milliseconds, 10) + ');';
+  return '[System.Threading.Thread]::Sleep(' + parseInt(milliseconds, 10) + ')';
 }
  
 function echo(message) {
@@ -188,6 +188,7 @@ function defaultExtension() {
  
 this.options = {
   receiver: '$selenium',
+  base_url: 'http://docs.seleniumhq.org/docs/02_selenium_ide.jsp',
   driver_namespace: "OpenQA.Selenium.Firefox",
   driver_capabilities: "Firefox()",
   showSelenese: 'false',
@@ -201,14 +202,14 @@ this.options = {
      '# http://stackoverflow.com/questions/8343767/how-to-get-the-current-directory-of-the-cmdlet-being-executed\n'+
      'function Get-ScriptDirectory\n'+
      '{\n'+
-     indents(1) + '$Invocation = (Get-Variable MyInvocation -Scope 1).Value;\n'+
-     indents(1) + 'if($Invocation.PSScriptRoot){\n'+
-     indents(2) + '$Invocation.PSScriptRoot;\n'+
+     indents(1) + '$Invocation = (Get-Variable MyInvocation -Scope 1).Value\n'+
+     indents(1) + 'if ($Invocation.PSScriptRoot) {\n'+
+     indents(2) + '$Invocation.PSScriptRoot\n'+
      indents(1) + '}\n'+
-     indents(1) + 'Elseif($Invocation.MyCommand.Path){\n'+
+     indents(1) + 'Elseif ($Invocation.MyCommand.Path) {\n'+
      indents(2) + 'Split-Path $Invocation.MyCommand.Path\n'+
      indents(1) + '} else {\n'+
-     indents(2) + '$Invocation.InvocationName.Substring(0,$Invocation.InvocationName.LastIndexOf("\"));\n'+
+     indents(2) + '$Invocation.InvocationName.Substring(0,$Invocation.InvocationName.LastIndexOf("\"))\n'+
      indents(1) + '}\n'+
      '}\n'+
      '$shared_assemblies = @(\n'+
@@ -223,7 +224,7 @@ this.options = {
      indents(1) + '$shared_assemblies | foreach-object { Unblock-File -Path $_ ; Add-Type -Path $_ }\n' +
      'popd\n\n' + 
      '$verificationErrors = new-object System.Text.StringBuilder\n' + 
-     '$baseURL = "http://www.wikipedia.org"\n' +
+     '$baseURL = "${base_url}"\n' +
      '$phantomjs_executable_folder = "C:\\tools\\phantomjs"\n'+
      'if ($PSBoundParameters["browser"]) {\n'+
      indents(1) + 'try { \n' + 
@@ -259,14 +260,17 @@ this.options = {
 
 
 this.configForm =
-	'<description>Variable for Selenium instance name</description>' +
+	'<description>Selenium instance name</description>' +
 	'<textbox id="options_receiver" />' +
-'<description>WebDriver Capabilities</description>' +
+	'<description>WebDriver Capabilities</description>' +
 	'<menulist id="options_driver_capabilities"><menupopup>' +
 	'<menuitem label="Firefox" value="Firefox()"/>' +
 	'<menuitem label="Google Chrome" value="Chrome()"/>' +
+	'<menuitem label="Safari" value="Safari()"/>' +
 	'<menuitem label="Internet Explorer" value="InternetExplorer()"/>' +
 	'</menupopup></menulist>'+ 
+	'<description>Base URL</description>' +
+	'<textbox id="options_base_url" />' +
 	'<checkbox id="options_showSelenese" label="Show Selenese"/>';
  
 this.name = 'Powershell (WebDriver) / Firefox';
