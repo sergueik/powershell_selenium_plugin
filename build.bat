@@ -1,6 +1,8 @@
 @echo off
  
 setlocal
+
+pushd %~dp0
  
 set APP_NAME="powershell-webdriver-formatter"
 set CHROME_PROVIDERS="content"
@@ -14,18 +16,21 @@ del /S /Q %TMP_DIR%
  
 mkdir %TMP_DIR%\chrome\content
  
-robocopy content %TMP_DIR%\chrome\content /E
-robocopy locale %TMP_DIR%\chrome\locale /E
-robocopy skin %TMP_DIR%\chrome\skin /E
-robocopy defaults %TMP_DIR%\defaults /E
+robocopy.exe content %TMP_DIR%\chrome\content /E
+robocopy.exe locale %TMP_DIR%\chrome\locale /E
+robocopy.exe skin %TMP_DIR%\chrome\skin /E
+robocopy.exe defaults %TMP_DIR%\defaults /E
 copy install.rdf %TMP_DIR%
 copy chrome.manifest.production %TMP_DIR%\chrome.manifest
  
-rem generate the XPI file
+rem Package the XPI file
 cd %TMP_DIR%
 echo "Generating %APP_NAME%.xpi..."
  
-"c:\program files\7-zip\7z.exe" a -r -y -tzip ../%APP_NAME%.zip *
+set GROOVY_HOME=c:\java\groovy-2.3.2
+PATH=%PATH%;%ProgramFiles%\7-Zip;%ProgramFiles(x86)%\7-Zip
+
+7z.exe a -r -y -tzip ../%APP_NAME%.zip *
  
 cd %ROOT_DIR%
 rename %APP_NAME%.zip %APP_NAME%.xpi
