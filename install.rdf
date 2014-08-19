@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
- xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
     <em:id>powershell-webdriver-formatter@serguei.kouzmine</em:id>
     <em:name>Powershell WebDriver Formatter</em:name>
-    <em:version>0.0.1</em:version>
+    <em:version>0.1.0</em:version>
     <em:creator>Serguei Kouzmine</em:creator>
     <em:description>Play Selenium recordings in Powershell</em:description>
-
-    <em:type>2</em:type> <!-- type extension -->
- 
+    <em:type>2</em:type>
+    <!-- type extension -->
+    <em:homepageURL/>
     <em:targetApplication>
       <Description>
-        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id><!-- firefox -->
-        <em:minVersion>1.5</em:minVersion>
-        <em:maxVersion>99.*</em:maxVersion>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <!-- firefox -->
+        <em:minVersion>3.0</em:minVersion>
+        <em:maxVersion>28.*</em:maxVersion>
       </Description>
     </em:targetApplication>
- 
-    <em:requires>   
+    <em:requires>
       <Description>
         <em:id>{a6fd85ed-e919-4a43-a5af-8da18bda539f}</em:id>
-        <em:minVersion>1.0.5</em:minVersion>
-        <em:maxVersion>1.*</em:maxVersion>
-      </Description>  
+        <em:minVersion>1.1.0</em:minVersion>
+        <em:maxVersion>2.*</em:maxVersion>
+      </Description>
     </em:requires>
   </Description>
 </RDF>

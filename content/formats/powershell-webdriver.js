@@ -1,10 +1,11 @@
 /*
  * Formatter for Powershell / WebDriver / Firefox client.
  */
- 
-var subScriptLoader = Components.classes['@mozilla.org/moz/jssubscript-loader;1'].getService(Components.interfaces.mozIJSSubScriptLoader);
-subScriptLoader.loadSubScript('chrome://selenium-ide/content/formats/webdriver.js', this);
- 
+if (!this.formatterType) {  
+  var subScriptLoader = Components.classes['@mozilla.org/moz/jssubscript-loader;1'].getService(Components.interfaces.mozIJSSubScriptLoader);
+  subScriptLoader.loadSubScript('chrome://selenium-ide/content/formats/webdriver.js', this);
+}
+
 function testClassName(testName) {
   return testName.split(/[^0-9A-Za-z]+/).map(
       function(x) {
@@ -271,6 +272,18 @@ this.configForm =
 	'</menupopup></menulist>'+ 
 	'<description>Base URL</description>' +
 	'<textbox id="options_base_url" />' +
+	'<description>Indent</description>' +
+	'<menulist id="options_indent"><menupopup>' +
+	'<menuitem label="Tab" value="tab"/>' +
+	'<menuitem label="1 space" value="1"/>' +
+	'<menuitem label="2 spaces" value="2"/>' +
+	'<menuitem label="3 spaces" value="3"/>' +
+	'<menuitem label="4 spaces" value="4"/>' +
+	'<menuitem label="5 spaces" value="5"/>' +
+	'<menuitem label="6 spaces" value="6"/>' +
+	'<menuitem label="7 spaces" value="7"/>' +
+	'<menuitem label="8 spaces" value="8"/>' +
+	'</menupopup></menulist>' +
 	'<checkbox id="options_showSelenese" label="Show Selenese"/>';
  
 this.name = 'Powershell (WebDriver) / Firefox';
@@ -345,11 +358,24 @@ WDAPI.Driver.prototype.chooseOkOnNextConfirmation = function() {
 WDAPI.Driver.prototype.chooseCancelOnNextConfirmation = function() {
   return '$acceptNextAlert = $false';
 };
- 
+
+WDAPI.Driver.prototype.runScript =  function(script) {
+return '([OpenQA.Selenium.IJavaScriptExecutor]'  + this.ref + ').ExecuteScript(' + xlateArgument(script) + ')';
+} 
+
+WDAPI.Driver.prototype.rollup = function (name, args) {
+  var rules = RollupManager.getInstance().getRollupRule(name).getExpandedCommands(args),
+  steps = [],i;
+  for (i = 0; i < rules.length; i++) {
+    steps.push(formatCommand(rules[i]));
+  }
+  return steps.join('\n');
+};
+
 WDAPI.Driver.prototype.refresh = function() {
   return this.ref + '.Navigate().Refresh()';
 };
- 
+
 WDAPI.Element = function(ref) {
   this.ref = ref;
 };
@@ -410,5 +436,19 @@ WDAPI.Utils = function() {
 };
  
 WDAPI.Utils.isElementPresent = function(how, what) {
-  return '[Selenium.Internal.SeleniumEmulation]::IsElementPres(' + WDAPI.Driver.searchContext(how, what) + ')';
+  return '[Selenium.Internal.SeleniumEmulation]::IsElementPresent(' + WDAPI.Driver.searchContext(how, what) + ')';
+};
+
+SeleniumWebDriverAdaptor.prototype.runScript = function(x) {
+  var driver = new WDAPI.Driver(),
+  script = this.rawArgs[0];
+  return driver.runScript(script);
+};
+
+
+SeleniumWebDriverAdaptor.prototype.rollup = function(name, args) {
+  var rollupName = this.rawArgs[0],
+  rollupArgs = this.rawArgs[1],
+  driver = new WDAPI.Driver();
+  return driver.rollup(rollupName, rollupArgs);
 };
