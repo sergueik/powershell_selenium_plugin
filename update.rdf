@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RDF:RDF xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+  <RDF:Description about="urn:mozilla:extension:powershell-webdriver-formatter@serguei.kouzmine">
+    <em:updates>
+      <RDF:Seq>
+        <RDF:li>
+          <RDF:Description>
+            <em:version>2.4.0</em:version>
+            <em:targetApplication>
+              <RDF:Description>
+                <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+                <!-- firefox -->
+                <em:minVersion>3.0</em:minVersion>
+                <em:maxVersion>28.*</em:maxVersion>
+                <em:updateLink></em:updateLink>
+                <em:updateInfoURL></em:updateInfoURL>
+                <em:updateHash>sha1:0b55ed12298ddf3bd7e3273b972593ce4e8ad282</em:updateHash>
+              </RDF:Description>
+            </em:targetApplication>
+          </RDF:Description>
+        </RDF:li>
+        <!-- Each li is a different version of the same add-on -->
+        <RDF:li>
+          <RDF:Description>
+            <em:version>0.1.1</em:version>
+            <em:targetApplication>
+              <RDF:Description>
+                <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+                <!-- firefox -->
+                <em:minVersion>3.0</em:minVersion>
+                <em:maxVersion>28.*</em:maxVersion>
+                <em:updateLink></em:updateLink>
+                <em:updateInfoURL></em:updateInfoURL>
+                <em:updateHash>sha1:0b55ed12298ddf3bd7e3273b972593ce4e8ad282</em:updateHash>
+              </RDF:Description>
+            </em:targetApplication>
+          </RDF:Description>
+        </RDF:li>
+        <RDF:li>
+          <RDF:Description>
+            <em:version>1.0</em:version>
+            <em:targetApplication>
+              <RDF:Description>
+                <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+                <!-- firefox -->
+                <em:minVersion>3.0</em:minVersion>
+                <em:maxVersion>28.*</em:maxVersion>
+                <em:updateLink></em:updateLink>
+                <em:updateInfoURL></em:updateInfoURL>
+                <em:updateHash>sha1:0b55ed12298ddf3bd7e3273b972593ce4e8ad282</em:updateHash>
+              </RDF:Description>
+            </em:targetApplication>
+          </RDF:Description>
+        </RDF:li>
+      </RDF:Seq>
+    </em:updates>
+  </RDF:Description>
+</RDF:RDF>

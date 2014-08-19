@@ -30,6 +30,9 @@ http://www.codeproject.com/Articles/799161/Dealing-with-Powershell-Inputs-via-Ba
 
 If everything done right, the generated Powershell script will need no modifications and can be run right away. If you have a failing test and need assistance tuning it please email the test to kouzmine_serguei@yahoo.com
 
+Author
+------
+[Serguei Kouzmine](kouzmine_serguei@yahoo.com)
 
 Special thanks
 --------------
