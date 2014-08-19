@@ -1,3 +1,17 @@
+http://stackoverflow.com/questions/15167178/selenium-formatter-modification-export-to-webdriver-backed-java
+
+ - 
+    The Selenium-IDE 1.x plugin API (Part 1) - Build and Preferences
+    The Selenium-IDE 1.x plugin API (Part 2) - The Toolbar
+    The Selenium-IDE 1.x plugin API (Part 3) - The Sidebar:
+    The Selenium-IDE 1.x plugin API (Part 4) - Extending the Selenium API
+    The Selenium-IDE 1.x plugin API (Part 5) - Publishing Updates
+    The Selenium-IDE 1.x plugin API (Part 6) - Formatters
+    The Selenium-IDE 1.x plugin API (Part 7) - Packaging Nuances
+    The Selenium-IDE 1.x plugin API (Part 8) - Localization
+    The Selenium-IDE 1.x plugin API (Part 9) - Secure Password Storage
+    The Selenium-IDE 1.x plugin API (Part 10) - Registering your plugin
+
 https://github.com/gempesaw/Selenium-Remote-Driver/blob/master/ide-plugin.js
 explains how to craft the formatter directly in Selenium IDE
 https://code.google.com/p/perl-formatters/source/browse/trunk/src/content/formats/perl-rc.js
