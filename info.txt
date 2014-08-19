@@ -12,6 +12,7 @@ http://stackoverflow.com/questions/15167178/selenium-formatter-modification-expo
     The Selenium-IDE 1.x plugin API (Part 9) - Secure Password Storage
     The Selenium-IDE 1.x plugin API (Part 10) - Registering your plugin
 
+https://developer.mozilla.org/en-US/Add-ons/Setting_up_extension_development_environment#Firefox_extension_proxy_file 
 https://github.com/gempesaw/Selenium-Remote-Driver/blob/master/ide-plugin.js
 explains how to craft the formatter directly in Selenium IDE
 https://code.google.com/p/perl-formatters/source/browse/trunk/src/content/formats/perl-rc.js
