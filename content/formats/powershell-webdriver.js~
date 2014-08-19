@@ -144,7 +144,7 @@ function pause(milliseconds) {
 }
  
 function echo(message) {
-  return 'write-output ' + xlateArgument(message) + ')';
+  return 'write-output' + xlateArgument(message) + ')';
 }
  
 function formatComment(comment) {
