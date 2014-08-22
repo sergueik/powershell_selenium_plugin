@@ -70,7 +70,8 @@ function assignToVariable(type, variable, expression) {
 function ifCondition(expression, callback) {
   return 'if (' + expression.toString() + ")\n{\n" + callback() + "\n}\n";
 }
- 
+//  TODO Example:
+// [NUnit.Framework.Assert]::IsTrue($selenium.findElements([OpenQA.Selenium.By]::Id("hplogo")).count -ne 0) 
 function assertTrue(expression) {
   return '[NUnit.Framework.Assert]::IsTrue(' + expression.toString() + ')';
 }
@@ -263,7 +264,8 @@ this.options = {
      indents(1) + '$selenium.Quit()\n' +
      '} catch [Exception] {\n' +
      indents(1) + '# Ignore errors if unable to close the browser\n' +
-          '}\n',
+          '}\n' +
+     '[NUnit.Framework.Assert]::AreEqual($verificationErrors.Length, 0)',
   defaultExtension: 'ps1'
 };
 
@@ -310,6 +312,11 @@ WDAPI.Driver.searchContext = function(locatorType, locator) {
       return '[OpenQA.Selenium.By]::CssSelector(' + locatorString + ')';
     case 'id':
       return '[OpenQA.Selenium.By]::Id(' + locatorString + ')';
+    // TODO: 'class'
+    // case 'class':
+    // return '[OpenQA.Selenium.By]::ClassName(' + locatorString + ')';
+    // return this.ref + '.FindElementsByClassName(' + locatorString + ')[0]';
+    // Error: unknown strategy [class]
     case 'link':
       return '[OpenQA.Selenium.By]::LinkText(' + locatorString + ')';
     case 'name':
@@ -423,7 +430,7 @@ WDAPI.Element.prototype.submit = function() {
 WDAPI.Element.prototype.select = function(label) {
   return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').SelectByText(' + xlateArgument(label) + ')';
 };
- 
+
 WDAPI.ElementList = function(ref) {
   this.ref = ref;
 };
@@ -443,10 +450,13 @@ WDAPI.ElementList.prototype.isEmpty = function() {
 WDAPI.Utils = function() {
 };
  
+// TODO: highlight
+// http://assertselenium.com/2012/12/20/highlight-webelements-using-selenium-webdriver/
+
 WDAPI.Utils.isElementPresent = function(how, what) {
   return '[Selenium.Internal.SeleniumEmulation]::IsElementPresent(' + WDAPI.Driver.searchContext(how, what) + ')';
-};
-
+}
+ 
 SeleniumWebDriverAdaptor.prototype.runScript = function(x) {
   var driver = new WDAPI.Driver(),
   script = this.rawArgs[0];
