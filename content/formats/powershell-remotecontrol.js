@@ -10,7 +10,7 @@ function testMethodName(testName) {
 	return 'The' + capitalize(testName) + 'Test';
 }
 NotEquals.prototype.assert = function() {
-  return '[NUnit.Framework.Assert]::AreNotEqual(' + this.e1.toString() + ', ' + this.e2.toString() +  ');';
+  return '[NUnit.Framework.Assert]::AreNotEqual(' + this.e1.toString() + ', ' + this.e2.toString() +  ')';
 };
 
 function assertTrue(expression) {
@@ -104,10 +104,6 @@ this.configForm =
 	'<menuitem label="2 spaces" value="2"/>' +
 	'<menuitem label="3 spaces" value="3"/>' +
 	'<menuitem label="4 spaces" value="4"/>' +
-	'<menuitem label="5 spaces" value="5"/>' +
-	'<menuitem label="6 spaces" value="6"/>' +
-	'<menuitem label="7 spaces" value="7"/>' +
-	'<menuitem label="8 spaces" value="8"/>' +
 	'</menupopup></menulist>' +
 	'<checkbox id="options_showSelenese" label="Show Selenese"/>';
  
@@ -121,7 +117,7 @@ function verify(statement) {
 }
  
 function testMethodName(testName) {
-	return "The" + capitalize(testName) + "Test";
+	return 'The' + capitalize(testName) + 'Test';
 }
 
 NotEquals.prototype.assert = function() {
@@ -201,7 +197,7 @@ NotEquals.prototype.verify = function() {
 };
 
 RegexpMatch.prototype.toString = function() {
-	return "Regex.IsMatch(" + this.expression + ", " + string(this.pattern) + ")";
+	return '[Regex]::IsMatch(' + this.expression + ', ' + string(this.pattern) + ')';
 };
 
 function pause(milliseconds) {
