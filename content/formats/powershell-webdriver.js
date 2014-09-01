@@ -81,10 +81,10 @@ function assertFalse(expression) {
 }
  
 function verify(statement) {
-  return "try {\n" +
+  return 'try {\n' +
       indents(1) + statement + "\n" +
       "} catch [NUnit.Framework.AssertionException] {\n" +
-      indents(1) + "$verificationErrors.Append($_.Exception.Message)\n" +
+      indents(1) + "$verificationErrors.Append( $_.Exception.Message )\n" +
       '}';
 }
  
@@ -115,70 +115,51 @@ RegexpMatch.prototype.toString = function() {
 };
  
 function waitFor(expression) {
-  return "for ([int] $second = 0;; $second++) {\n" +
-      indents(1) + 'if ($second -gt 60) [NUnit.Framework.Assert]::Fail("timeout");\n' +
-      indents(1) + "try\n" +
-      indents(1) + "{\n" +
-      (expression.setup ? indents(2) + expression.setup() + "\n" : "") +
-      indents(2) + "if (" + expression.toString() + ") break;\n" +
-      indents(1) + "}\n" +
-      indents(1) + "catch [Exception]\n" +
-      indents(1) + "{}\n" +
-      indents(1) + "Thread.Sleep(1000)\n" +
-      "}";
+  return 'for ([int] $second = 0;; $second++) {\n' +
+      indents(1) + 'if ( $second -gt 60 )\n' +
+      indents(2) + '{\n' +
+      indents(3) + '[NUnit.Framework.Assert]::Fail( "timeout" )\n'  +
+      indents(2) + '}\n' +
+      indents(1) + 'try\n' +
+      indents(1) + '{\n' +
+      (expression.setup ? indents(2) + expression.setup() + '\n' : '') +
+      indents(2) + 'if (' + expression.toString() + ')\n' +
+      indents(3) + '{\n' +
+      indents(4) + 'break\n' +
+      indents(3) + '}\n' +
+      indents(1) + '}\n' +
+      indents(1) + 'catch [Exception]\n' +
+      indents(1) + '{}\n' +
+      indents(1) + 'Start-Sleep -Seconds 1\n' +
+      '}\n';
 }
  
 function assertOrVerifyFailure(line, isAssert) {
   var message = '"expected failure"';
-  var failStatement = isAssert ? "[NUnit.Framework.Assert]::Fail(" + message + ")" :
-      "$verificationErrors.Append(" + message + ")";
-  return "try\n" +
-      "{\n" +
-      line + "\n" +
-      failStatement + "\n" +
-      "}\n" +
-      "catch [Exception] {}\n";
+  var failStatement = isAssert ? '[NUnit.Framework.Assert]::Fail(' + message + ')' :
+      '$verificationErrors.Append(' + message + ')';
+  return 'try\n' +
+      '{\n' +
+      line + 
+      '\n' +
+      failStatement + 
+      '\n' +
+      '}\n' +
+      'catch [Exception] \n{\n\n}\n';
 }
  
 function pause(milliseconds) {
-  return '[System.Threading.Thread]::Sleep(' + parseInt(milliseconds, 10) + ')';
+  return 'Start-Sleep -Milliseconds ' + parseInt(milliseconds, 10);
 }
  
 function echo(message) {
-  return 'write-output ' + xlateArgument(message) + ')';
+  return 'Write-Output (' + xlateArgument(message) +')\n';
 }
  
 function formatComment(comment) {
   return comment.comment.replace(/.+/mg, function(str) {
     return '# ' + str;
   });
-}
- 
-/**
- * Returns a string representing the suite for this formatter language.
- *
- * @param testSuite  the suite to format
- * @param filename   the file the formatted suite will be saved as
- */
-function formatSuite(testSuite, filename) {
-  var suiteClass = /^(\w+)/.exec(filename)[1];
-  suiteClass = suiteClass[0].toUpperCase() + suiteClass.substring(1);
- 
-  var formattedSuite = "\n";
- 
-  for (var i = 0; i < testSuite.tests.length; ++i) {
-    var testClass = testSuite.tests[i].getTitle();
-    formattedSuite += indents(4)
-        + 'suite.Add(new ' + testClass + "());\n";
-  }
- 
-  formattedSuite += indents(4) + "return suite;\n"
-      + indents(3) + "}\n"
-      + indents(2) + "}\n"
-      + indents(1) + "}\n"
-      + "}\n";
- 
-  return formattedSuite;
 }
  
 function defaultExtension() {
@@ -188,8 +169,8 @@ function defaultExtension() {
 this.options = {
   receiver: '$selenium',
   base_url: 'http://docs.seleniumhq.org/docs/02_selenium_ide.jsp',
-  driver_namespace: "OpenQA.Selenium.Firefox",
-  driver_capabilities: "Firefox()",
+  driver_namespace: 'OpenQA.Selenium.Firefox',
+  driver_capabilities: 'Firefox()',
   showSelenese: 'false',
   baseclass: 'BaseTest',
   indent: '4',
@@ -248,15 +229,24 @@ this.options = {
      indents(1) + '$options = new-object OpenQA.Selenium.PhantomJS.PhantomJSOptions\n'+
      indents(1) + '$options.AddAdditionalCapability("phantomjs.executable.path", $phantomjs_executable_folder)\n'+
      '}\n' +
+	indents(1) + '[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null\n' +
+	indents(1) + '[System.Reflection.Assembly]::LoadWithPartialName("System.ComponentModel") | Out-Null\n'+
+	indents(1) + '[System.Reflection.Assembly]::LoadWithPartialName("System.Data") | Out-Null\n'+
+	indents(1) + '[System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") | Out-Null\n'+
+	indents(1) + '$selenium.Manage().Window.Position = New-Object System.Drawing.Point(0, 0)\n' +
+     indents(1) + '$mainWindow = $selenium.CurrentWindowHandle\n' +
+     indents(1) + '$windows = $selenium.WindowHandles\n'+
+     indents(1) + '[bool]$acceptNextAlert = $false\n'+
      // show usage ...
      indents(1) + '# WebDriver script generated by Selenium IDE formatter\n'+
      indents(1) + '# example usage:\n'+
      indents(1) + '# $queryBox.SendKeys([OpenQA.Selenium.Keys]::ArrowDown)\n'+
      indents(1) + '# $queryBox.Submit()\n'+
-     indents(1) + '# $driver.FindElement([OpenQA.Selenium.By]::LinkText("Selenium (software)")).Click()\n'+
-     indents(1) + '# $title =  $driver.Title\n'+
-     indents(1) + '# $driver.Quit()\n'+
-    '\n' , 
+     indents(1) + '# $selenium.FindElement([OpenQA.Selenium.By]::LinkText("Selenium (software)")).Click()\n'+
+     indents(1) + '# $title =  $selenium.Title\n'+
+     indents(1) + '# $selenium.Quit()\n'+
+
+     '\n' , 
 
   footer:
      '# Cleanup\n' +
@@ -296,7 +286,7 @@ this.configForm =
 	'</menupopup></menulist>' +
 	'<checkbox id="options_showSelenese" label="Show Selenese"/>';
  
-this.name = 'Powershell (WebDriver) / Firefox';
+this.name = 'Powershell (WebDriver)';
 this.webdriver = true;
  
 WDAPI.Driver = function() {
@@ -312,7 +302,8 @@ WDAPI.Driver.searchContext = function(locatorType, locator) {
       return '[OpenQA.Selenium.By]::CssSelector(' + locatorString + ')';
     case 'id':
       return '[OpenQA.Selenium.By]::Id(' + locatorString + ')';
-    // TODO: 'class'
+    // TODO: handle 'class'
+    // the following code does not work:
     // case 'class':
     // return '[OpenQA.Selenium.By]::ClassName(' + locatorString + ')';
     // return this.ref + '.FindElementsByClassName(' + locatorString + ')[0]';
@@ -376,7 +367,7 @@ WDAPI.Driver.prototype.chooseCancelOnNextConfirmation = function() {
 
 WDAPI.Driver.prototype.runScript =  function(script) {
 return '([OpenQA.Selenium.IJavaScriptExecutor]'  + this.ref + ').ExecuteScript(' + xlateArgument(script) + ')';
-} 
+}; 
 
 WDAPI.Driver.prototype.rollup = function (name, args) {
   var rules = RollupManager.getInstance().getRollupRule(name).getExpandedCommands(args),
@@ -394,6 +385,10 @@ WDAPI.Driver.prototype.refresh = function() {
 WDAPI.Element = function(ref) {
   this.ref = ref;
 };
+
+WDAPI.Element.prototype.location = function() {
+  return this.ref + '.Location';
+};
  
 WDAPI.Element.prototype.clear = function() {
   return this.ref + '.Clear()';
@@ -401,6 +396,33 @@ WDAPI.Element.prototype.clear = function() {
  
 WDAPI.Element.prototype.click = function() {
   return this.ref + '.Click()';
+};
+
+WDAPI.Driver.prototype.switchWindow = function(name) {
+  if(name == 'null')
+	  return this.ref + ".SwitchTo().Window($mainWindow)";
+  if(name == 'last')
+	  return '$windows = $selenium.WindowHandles\n'+ 
+          this.ref + '.SwitchTo().Window( $windows[$windows.Count - 1 ] )';
+  return 'windowSwitch(' + xlateArgument(name.split('=')[1]) + ')';
+};
+
+WDAPI.Driver.prototype.selectPopup = function(name) {
+  if(name == 'null')
+	return this.ref + '.SwitchTo().Window($selenium.WindowHandles[$selenium.WindowHandles.Count-1])';
+  if(name == '')
+	return this.ref + '.SwitchTo().Window($selenium.WindowHandles[$selenium.WindowHandles.Count-1])';
+  return 'windowSwitch(' + xlateArgument(name.split('=')[1]) + ')';
+};
+
+WDAPI.Driver.prototype.switchFrame = function(name) {
+  if(name.split('=')[0] == 'index')
+	return '$selenium.SwitchTo().Frame(' + name.split('=')[1] + ')';
+  return this.ref + '.SwitchTo().Frame(' + xlateArgument(name) + ')';
+};
+
+WDAPI.Element.prototype.SelectedOption = function() {
+  return new WDAPI.Element('New-Object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').SelectedOption');
 };
  
 WDAPI.Element.prototype.getAttribute = function(attributeName) {
@@ -428,7 +450,23 @@ WDAPI.Element.prototype.submit = function() {
 };
  
 WDAPI.Element.prototype.select = function(label) {
-  return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').SelectByText(' + xlateArgument(label) + ')';
+ if (selectLocator.type == 'index') {
+    return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').SelectByIndex(' + selectLocator.string + ')';
+  }
+  if (selectLocator.type == 'value') {
+    return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').SelectByValue(' + xlateArgument(selectLocator.string) + ')';
+  }
+  return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').SelectByText(' + xlateArgument(selectLocator.string) + ')';
+};
+
+WDAPI.Element.prototype.deselect = function(selectLocator) {
+  if (selectLocator.type == 'index') {
+    return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').DeselectByIndex(' + selectLocator.string + ')';
+  }
+  if (selectLocator.type == 'value') {
+    return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').DeselectByValue(' + xlateArgument(selectLocator.string) + ')';
+  }
+  return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').DeselectByText(' + xlateArgument(selectLocator.string) + ')';
 };
 
 WDAPI.ElementList = function(ref) {
@@ -455,7 +493,7 @@ WDAPI.Utils = function() {
 
 WDAPI.Utils.isElementPresent = function(how, what) {
   return '[Selenium.Internal.SeleniumEmulation]::IsElementPresent(' + WDAPI.Driver.searchContext(how, what) + ')';
-}
+};
  
 SeleniumWebDriverAdaptor.prototype.runScript = function(x) {
   var driver = new WDAPI.Driver(),
@@ -463,6 +501,14 @@ SeleniumWebDriverAdaptor.prototype.runScript = function(x) {
   return driver.runScript(script);
 };
 
+SeleniumWebDriverAdaptor.prototype.setTimeout = function(x) {
+timeout = this.rawArgs[0];
+return '[void]$selenium.manage().timeouts().SetScriptTimeout([System.TimeSpan]::FromSeconds(' + timeout + '))';
+};
+
+WDAPI.Utils.getEval = function(script) {
+return '(([OpenQA.Selenium.IJavaScriptExecutor]'  + this.ref + ').ExecuteScript(' + xlateArgument(script) + ')).ToString()';
+};
 
 SeleniumWebDriverAdaptor.prototype.rollup = function(name, args) {
   var rollupName = this.rawArgs[0],
