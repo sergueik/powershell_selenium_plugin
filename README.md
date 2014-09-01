@@ -40,4 +40,5 @@ The code is derived from one of David Zwarg's Selenium C# formatters
 (https://github.com/azavea/selenium-net-formatters)
 and Dave Hunt's formaters 
 (https://github.com/davehunt/selenium-ide-webdriver-backed-formatters)
-
+Additional functons copied from cs-wd.js implementatiob by zac everett and Rick C 
+(see C# Nunit formatter discussion at https://groups.google.com/forum/#!topic/selenium-users/gyHeYPiV8hg )

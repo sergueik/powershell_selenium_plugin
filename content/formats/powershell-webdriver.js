@@ -81,10 +81,10 @@ function assertFalse(expression) {
 }
  
 function verify(statement) {
-  return "try {\n" +
+  return 'try {\n' +
       indents(1) + statement + "\n" +
       "} catch [NUnit.Framework.AssertionException] {\n" +
-      indents(1) + "$verificationErrors.Append($_.Exception.Message)\n" +
+      indents(1) + "$verificationErrors.Append( $_.Exception.Message )\n" +
       '}';
 }
  
@@ -115,17 +115,23 @@ RegexpMatch.prototype.toString = function() {
 };
  
 function waitFor(expression) {
-  return "for ([int] $second = 0;; $second++) {\n" +
-      indents(1) + 'if ($second -gt 60) [NUnit.Framework.Assert]::Fail("timeout");\n' +
-      indents(1) + "try\n" +
-      indents(1) + "{\n" +
-      (expression.setup ? indents(2) + expression.setup() + "\n" : "") +
-      indents(2) + "if (" + expression.toString() + ") break;\n" +
-      indents(1) + "}\n" +
-      indents(1) + "catch [Exception]\n" +
-      indents(1) + "{}\n" +
-      indents(1) + "Thread.Sleep(1000)\n" +
-      "}";
+  return 'for ([int] $second = 0;; $second++) {\n' +
+      indents(1) + 'if ($second -gt 60)\n' +
+      indents(2) + '{\n' +
+      indents(3) + "[NUnit.Framework.Assert]::Fail('timeout')\n'  +
+      indents(2) + '}\n' +
+      indents(1) + 'try\n' +
+      indents(1) + '{\n' +
+      (expression.setup ? indents(2) + expression.setup() + '\n' : '') +
+      indents(2) + 'if (' + expression.toString() + ')\n' +
+      indents(3) + '{\n' +
+      indents(4) + 'break\n' +
+      indents(3) + '}\n' +
+      indents(1) + '}\n' +
+      indents(1) + 'catch [Exception]\n' +
+      indents(1) + '{}\n' +
+      indents(1) + 'Start-Sleep -Seconds 1\n' +
+      '}\n';
 }
  
 function assertOrVerifyFailure(line, isAssert) {
@@ -141,11 +147,11 @@ function assertOrVerifyFailure(line, isAssert) {
 }
  
 function pause(milliseconds) {
-  return '[System.Threading.Thread]::Sleep(' + parseInt(milliseconds, 10) + ')';
+  return 'Start-Sleep -Milliseconds ' + parseInt(milliseconds, 10);
 }
  
 function echo(message) {
-  return 'write-output ' + xlateArgument(message) + ')';
+  return 'Write-Output ' + xlateArgument(message) + ')';
 }
  
 function formatComment(comment) {
@@ -394,6 +400,10 @@ WDAPI.Driver.prototype.refresh = function() {
 WDAPI.Element = function(ref) {
   this.ref = ref;
 };
+
+WDAPI.Element.prototype.location = function() {
+  return this.refi + '.Location';
+};
  
 WDAPI.Element.prototype.clear = function() {
   return this.ref + '.Clear()';
@@ -402,6 +412,31 @@ WDAPI.Element.prototype.clear = function() {
 WDAPI.Element.prototype.click = function() {
   return this.ref + '.Click()';
 };
+
+WDAPI.Driver.prototype.switchWindow = function(name) {
+  if(name=="null")
+	  return this.ref + ".SwitchTo().Window(mainWindow)";
+  if(name=="last")
+	  return "$windows = $driver.WindowHandles;\n"+this.ref + ".SwitchTo().Window( $windows[$windows.Count - 1 ] ) ";
+  return "windowSwitch("+xlateArgument(name.split("=")[1])+")";
+};
+
+WDAPI.Driver.prototype.selectPopup = function(name) {
+  if(name=="null")
+	  return this.ref + ".SwitchTo().Window($driver.WindowHandles[$driver.WindowHandles.Count-1])";
+  if(name=="")
+	  return this.ref + ".SwitchTo().Window($driver.WindowHandles[$driver.WindowHandles.Count-1])";
+  return "windowSwitch("+xlateArgument(name.split("=")[1])+")";
+};
+
+WDAPI.Driver.prototype.switchFrame = function(name) {
+  if(name.split("=")[0]=="index")
+		return "$driver.SwitchTo().Frame("+name.split("=")[1]+")";
+  return this.ref + ".SwitchTo().Frame("+xlateArgument(name)+")";
+};
+
+WDAPI.Element.prototype.SelectedOption = function() {
+  return new WDAPI.Element("New-Object SelectElement("+this.ref + ").SelectedOption");
  
 WDAPI.Element.prototype.getAttribute = function(attributeName) {
   return this.ref + '.GetAttribute(' + xlateArgument(attributeName) + ')';
@@ -428,7 +463,23 @@ WDAPI.Element.prototype.submit = function() {
 };
  
 WDAPI.Element.prototype.select = function(label) {
-  return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').SelectByText(' + xlateArgument(label) + ')';
+ if (selectLocator.type == 'index') {
+    return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').SelectByIndex(' + selectLocator.string + ')';
+  }
+  if (selectLocator.type == 'value') {
+    return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').SelectByValue(' + xlateArgument(selectLocator.string) + ')';
+  }
+  return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').SelectByText(' + xlateArgument(selectLocator.string) + ')';
+};
+
+WDAPI.Element.prototype.deselect = function(selectLocator) {
+  if (selectLocator.type == 'index') {
+    return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').DeselectByIndex(' + selectLocator.string + ')';
+  }
+  if (selectLocator.type == 'value') {
+    return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').DeselectByValue(' + xlateArgument(selectLocator.string) + ')';
+  }
+  return 'new-object OpenQA.Selenium.Support.UI.SelectElement(' + this.ref + ').DeselectByText(' + xlateArgument(selectLocator.string) + ')';
 };
 
 WDAPI.ElementList = function(ref) {
@@ -463,6 +514,9 @@ SeleniumWebDriverAdaptor.prototype.runScript = function(x) {
   return driver.runScript(script);
 };
 
+WDAPI.Utils.getEval = function(script) {
+return '(([OpenQA.Selenium.IJavaScriptExecutor]'  + this.ref + ').ExecuteScript(' + xlateArgument(script) + ')).ToString()';
+};
 
 SeleniumWebDriverAdaptor.prototype.rollup = function(name, args) {
   var rollupName = this.rawArgs[0],
