@@ -148,19 +148,24 @@ function assignToVariable(type, variable, expression) {
 	return capitalize(type) + " " + variable + " = " + expression.toString();
 }
 
-
 function waitFor(expression) {
-  return "for ([int] $second = 0;; $second++) {\n" +
-      indents(1) + 'if ($second -gt 60) [NUnit.Framework.Assert]::Fail("timeout");\n' +
-      indents(1) + "try\n" +
-      indents(1) + "{\n" +
-      (expression.setup ? indents(2) + expression.setup() + "\n" : "") +
-      indents(2) + "if (" + expression.toString() + ") break;\n" +
-      indents(1) + "}\n" +
-      indents(1) + "catch [Exception]\n" +
-      indents(1) + "{}\n" +
-      indents(1) + "Thread.Sleep(1000)\n" +
-      "}";
+  return 'for ([int] $second = 0;; $second++) {\n' +
+      indents(1) + 'if ($second -gt 60)\n' +
+      indents(2) + '{\n' +
+      indents(3) + '[NUnit.Framework.Assert]::Fail("timeout")\n'  +
+      indents(2) + '}\n' +
+      indents(1) + 'try\n' +
+      indents(1) + '{\n' +
+      (expression.setup ? indents(2) + expression.setup() + '\n' : '') +
+      indents(2) + 'if (' + expression.toString() + ')\n' +
+      indents(3) + '{\n' +
+      indents(4) + 'break\n' +
+      indents(3) + '}\n' +
+      indents(1) + '}\n' +
+      indents(1) + 'catch [Exception]\n' +
+      indents(1) + '{}\n' +
+      indents(1) + 'Start-Sleep -Seconds 1\n' +
+      '}\n';
 }
 
 function assertOrVerifyFailure(line, isAssert) {
@@ -185,7 +190,7 @@ NotEquals.prototype.toString = function() {
 };
 
 Equals.prototype.assert = function() {
-  return '[NUnit.Framework.Assert]::AreEqual(' + this.e1.toString() + ', ' + this.e2.toString() + ');';
+  return '[NUnit.Framework.Assert]::AreEqual(' + this.e1.toString() + ', ' + this.e2.toString() + ')';
 };
  
 Equals.prototype.verify = function() {
@@ -201,11 +206,11 @@ RegexpMatch.prototype.toString = function() {
 };
 
 function pause(milliseconds) {
-  return '[System.Threading.Thread]::Sleep(' + parseInt(milliseconds, 10) + ')';
+  return 'Start-Sleep -Milliseconds ' + parseInt(milliseconds, 10);
 }
 
 function echo(message) {
-  return 'write-output ' + xlateArgument(message) + ')';
+  return 'Write-Output (' + xlateArgument(message) + ')';
 }
 
 function statement(expression) {

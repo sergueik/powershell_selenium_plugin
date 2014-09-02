@@ -24,7 +24,7 @@ The Powershell script assumes Selenium WebDriver and Nunit dlls
 to be available in the path SHARED_ASSEMBLIES_PATH 
 and Selenium java hub and node be started as Windows batch files hub.cmd and node.cmd respectively. If the latter is already listening on port 4444, no batch files are required.
 
-For more invormation visit
+For more information visit
 author's article at CodeProject
 http://www.codeproject.com/Articles/799161/Dealing-with-Powershell-Inputs-via-Basic-Windows-F#54C724BE37D04CE0AD9584606ACF5560
 
@@ -40,4 +40,5 @@ The code is derived from one of David Zwarg's Selenium C# formatters
 (https://github.com/azavea/selenium-net-formatters)
 and Dave Hunt's formaters 
 (https://github.com/davehunt/selenium-ide-webdriver-backed-formatters)
-
+Additional functons copied from cs-wd.js implementatiob by zac everett and Rick C 
+(see C# Nunit formatter discussion at https://groups.google.com/forum/#!topic/selenium-users/gyHeYPiV8hg )
