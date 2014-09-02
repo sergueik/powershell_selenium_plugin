@@ -3,7 +3,7 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>powershell-webdriver-formatter@serguei.kouzmine</em:id>
     <em:name>Powershell WebDriver Formatter</em:name>
-    <em:version>0.3.0</em:version>
+    <em:version>0.3.1</em:version>
     <em:creator>Serguei Kouzmine</em:creator>
     <em:description>Play Selenium recordings in Powershell</em:description>
     <em:type>2</em:type>
