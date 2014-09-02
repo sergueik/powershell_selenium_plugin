@@ -152,7 +152,7 @@ function waitFor(expression) {
   return 'for ([int] $second = 0;; $second++) {\n' +
       indents(1) + 'if ($second -gt 60)\n' +
       indents(2) + '{\n' +
-      indents(3) + "[NUnit.Framework.Assert]::Fail('timeout')\n'  +
+      indents(3) + '[NUnit.Framework.Assert]::Fail("timeout")\n'  +
       indents(2) + '}\n' +
       indents(1) + 'try\n' +
       indents(1) + '{\n' +
@@ -190,7 +190,7 @@ NotEquals.prototype.toString = function() {
 };
 
 Equals.prototype.assert = function() {
-  return '[NUnit.Framework.Assert]::AreEqual(' + this.e1.toString() + ', ' + this.e2.toString() + ');';
+  return '[NUnit.Framework.Assert]::AreEqual(' + this.e1.toString() + ', ' + this.e2.toString() + ')';
 };
  
 Equals.prototype.verify = function() {
@@ -210,7 +210,7 @@ function pause(milliseconds) {
 }
 
 function echo(message) {
-  return 'Write-Output ' + xlateArgument(message) + ')';
+  return 'Write-Output (' + xlateArgument(message) + ')';
 }
 
 function statement(expression) {
