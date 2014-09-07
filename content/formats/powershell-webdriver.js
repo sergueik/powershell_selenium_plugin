@@ -4,6 +4,7 @@
 if (!this.formatterType) {  
   var subScriptLoader = Components.classes['@mozilla.org/moz/jssubscript-loader;1'].getService(Components.interfaces.mozIJSSubScriptLoader);
   subScriptLoader.loadSubScript('chrome://selenium-ide/content/formats/webdriver.js', this);
+  subScriptLoader.loadSubScript('chrome://selenium-ide/content/testCase.js', this);
 }
 
 function testClassName(testName) {
@@ -21,6 +22,14 @@ function nonBreakingSpace() {
   return "\"\\u00a0\"";
 }
  
+function notOperator() {
+  return '-not ';
+}
+
+function logicalAnd(conditions) {
+  return conditions.join(" -and ");
+}
+
 function array(value) {
   var str = '@(';
   for (var i = 0; i < value.length; i++) {
@@ -30,7 +39,12 @@ function array(value) {
   str += ')';
   return str;
 }
- 
+
+
+function concatString(array) {
+  return '(' + array.join(' + ') + ')';
+}
+
 Equals.prototype.toString = function() {
   return this.e1.toString() + ' -eq ' + this.e2.toString();
 };
@@ -367,7 +381,30 @@ WDAPI.Driver.prototype.chooseCancelOnNextConfirmation = function() {
 
 WDAPI.Driver.prototype.runScript =  function(script) {
 return '([OpenQA.Selenium.IJavaScriptExecutor]'  + this.ref + ').ExecuteScript(' + xlateArgument(script) + ')';
+/*
+
+<#
+The following code will successfully run  executeAsyncScript under Powershell or c#:
+[int]$timeout  =  ...
+[String] $script = ... 
+[void]$selenium.manage().timeouts().SetScriptTimeout([System.TimeSpan]::FromSeconds($timeout))
+
+try {
+[void]([OpenQA.Selenium.IJavaScriptExecutor]$selenium).executeAsyncScript($script);
+
+} catch [OpenQA.Selenium.WebDriverTimeoutException]{
+
+  [NUnit.Framework.Assert]::IsTrue(  $_.Exception.Message -match '(?:Timed out waiting for async script result|asynchronous script timeout)')
+}
+
+#>
+*/
 }; 
+
+
+WDAPI.Driver.prototype.runScriptAndWait =  function(script) {
+return '# --- \n([OpenQA.Selenium.IJavaScriptExecutor]'  + this.ref + ').ExecuteScript(' + xlateArgument(script) + ')';
+};
 
 WDAPI.Driver.prototype.rollup = function (name, args) {
   var rules = RollupManager.getInstance().getRollupRule(name).getExpandedCommands(args),
@@ -501,6 +538,12 @@ SeleniumWebDriverAdaptor.prototype.runScript = function(x) {
   return driver.runScript(script);
 };
 
+SeleniumWebDriverAdaptor.prototype.runScriptAndWait = function(x) {
+  var driver = new WDAPI.Driver(),
+  script = this.rawArgs[0];
+  return driver.runScriptAndWait(script);
+};
+
 SeleniumWebDriverAdaptor.prototype.setTimeout = function(x) {
 timeout = this.rawArgs[0];
 return '[void]$selenium.manage().timeouts().SetScriptTimeout([System.TimeSpan]::FromSeconds(' + timeout + '))';
@@ -516,3 +559,33 @@ SeleniumWebDriverAdaptor.prototype.rollup = function(name, args) {
   driver = new WDAPI.Driver();
   return driver.rollup(rollupName, rollupArgs);
 };
+
+Command.prototype.getDefinition = function() {
+	if (this.command == null) return null;
+        // match
+	var commandName = this.command.replace(/AndWait$/, '');
+	commandName = this.command;
+	var api = Command.loadAPI();
+	var r = /^(assert|verify|store|waitFor)(.*)$/.exec(commandName);
+	if (r) {
+		var suffix = r[2];
+		var prefix = "";
+		if ((r = /^(.*)NotPresent$/.exec(suffix)) != null) {
+			suffix = r[1] + "Present";
+			prefix = "!";
+		} else if ((r = /^Not(.*)$/.exec(suffix)) != null) {
+			suffix = r[1];
+			prefix = "!";
+		}
+		var booleanAccessor = api[prefix + "is" + suffix];
+		if (booleanAccessor) {
+			return booleanAccessor;
+		}
+		var accessor = api[prefix + "get" + suffix];
+		if (accessor) {
+			return accessor;
+		}
+	}
+	return api[commandName];
+}
+
